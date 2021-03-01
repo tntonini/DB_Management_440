@@ -2,12 +2,13 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 using namespace std;
 
 struct EmpBlock
 {
-    int eid;
+    int eid; //Key
     string ename;
     int age;
     double salary;
@@ -15,10 +16,21 @@ struct EmpBlock
 
 struct DeptBlock
 {
-    int did;
+    int did; //Key
     string dname;
     double budget;
     int managerid;
+};
+
+struct JoinBlock
+{
+    int id;
+    string ename;
+    int age;
+    double salary;
+    int did;
+    string dname;
+    double budget;
 };
 
 // Grab a single block from the emp.csv file, in theory if a block was larger than
@@ -86,13 +98,62 @@ void printJoin(EmpBlock emp, DeptBlock dept, fstream &fout)
          << dept.budget << "\n";
 }
 
+/**
+ * 
+ * Sort algorthim referenced here 
+ * https://stackoverflow.com/questions/873715/c-sort-with-structs/874352
+ * 
+ * */
+bool compareEmp(EmpBlock const &lhs, EmpBlock const &rhs)
+{
+    return lhs.eid < rhs.eid;
+}
+
+bool compareDept(DeptBlock const &lhs, DeptBlock const &rhs)
+{
+    return lhs.did < rhs.did;
+}
+
+JoinBlock sortMerge(EmpBlock emp[], DeptBlock dept[])
+{
+    //Sort emp block
+    sort(emp, emp + 30, &compareEmp);
+
+    //Sort dept block
+    sort(dept, dept + 15, &compareDept);
+}
+
 int main()
 {
     // open file streams to read and write
     fstream empin;
+    fstream deptin;
     fstream joinout;
+
     empin.open("Emp.csv", ios::in);
-    joinout.open("Join.csv", ios::out | ios::app);
+    deptin.open("Dept.csv", ios::in);
+    joinout.open("Join.csv", ios::out);
+
+    EmpBlock empBlock[30];
+    DeptBlock deptBlock[15];
+
+    if (!empin || !deptin)
+    {
+        cerr << "File can't be opened! " << endl;
+        exit(1);
+    }
+    for (int i = 0; i < 30; i++)
+    {
+        empin >> empBlock[i].eid >> empBlock[i].ename >> empBlock[i].age >> empBlock[i].salary;
+    }
+    for (int i = 0; i < 15; i++)
+    {
+        deptin >> deptBlock[i].did >> deptBlock[i].dname >> deptBlock[i].budget >> deptBlock[i].managerid;
+    }
+
+    sortMerge(empBlock, deptBlock);
+
+    /*
     // flags check when relations are done being read
     bool flag = true;
     while (flag)
@@ -100,7 +161,7 @@ int main()
         // FOR BLOCK IN RELATION EMP
 
         // grabs a block
-        EmpBlock empBlock = grabEmp(empin);
+        empBlock = grabEmp(empin);
         // checks if filestream is empty
         if (empBlock.eid == -1)
         {
@@ -113,7 +174,7 @@ int main()
         while (iflag)
         {
             // FOR BLOCK IN RELATION DEPT
-            DeptBlock deptBlock = grabDept(deptin);
+            deptBlock = grabDept(deptin);
 
             // in theory these would iterate through the two blocks: empBlock and deptBlock
             // but since both only contain one tuple, no iteration is needed
@@ -123,6 +184,7 @@ int main()
             }
             else
             {
+
                 // check join condition and print join to output file
                 if (deptBlock.managerid == empBlock.eid)
                 {
@@ -131,6 +193,7 @@ int main()
             }
         }
     }
+*/
 
     return 0;
 }
