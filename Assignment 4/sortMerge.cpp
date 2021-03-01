@@ -65,26 +65,7 @@ void sortMerge(vector<EmpBlock> emp, vector<DeptBlock> dept)
     sort(dept.begin(), dept.end(), compareDept);
 
     int empSize = emp.size();
-    cout << empSize << endl;
     int deptSize = dept.size();
-    cout << deptSize << endl;
-
-    ofstream empSort;
-    empSort.open("empsort.csv");
-    empSort << "Eid, ename, age, salary" << endl;
-    for (int i = 0; i < empSize; i++)
-    {
-        empSort << " " << emp[i].eid << " " << emp[i].ename << " " << emp[i].age << " " << emp[i].salary << " " << endl;
-    }
-    empSort.close();
-    ofstream deptSort;
-    deptSort.open("deptsort.csv");
-    deptSort << "did, dname, budget, managerid" << endl;
-    for (int i = 0; i < deptSize; i++)
-    {
-        deptSort << " " << dept[i].did << " " << dept[i].dname << " " << dept[i].budget << " " << dept[i].managerid << " " << endl;
-    }
-    deptSort.close();
 
     int count = 0;
     int mark = 0, r = 0, s = 0, empCount = 0, deptCount = 0;
@@ -94,21 +75,17 @@ void sortMerge(vector<EmpBlock> emp, vector<DeptBlock> dept)
         {
             while (emp[r].eid < dept[s].managerid)
             {
-                cout << "Inside first while loop emp: " << emp[r].eid << " dept: " << dept[s].managerid << endl;
                 r++;
             }
 
             if (emp[r].eid > dept[s].managerid)
             {
-                cout << "Inside second while loop emp: " << emp[r].eid << " dept: " << dept[s].managerid << endl;
                 s++;
             }
             mark = s;
         }
         if (emp[r].eid == dept[s].managerid)
         {
-            cout << "Before adding to file emp: " << emp[r].eid << " dept: " << dept[s].managerid << endl;
-
             joinout << emp[r].eid << ", " << emp[r].ename << ", " << emp[r].age << ", "
                     << emp[r].salary << ", " << dept[s].did << ", " << dept[s].dname << ", "
                     << dept[s].budget << "\n";
@@ -122,7 +99,6 @@ void sortMerge(vector<EmpBlock> emp, vector<DeptBlock> dept)
             mark = 0;
             count++;
         }
-        // }while(count < 110);
     } while (r != empSize && s != deptSize);
 
     return;
@@ -191,7 +167,6 @@ int main()
         i++;
     }
     deptin.close();
-    cout << "here" << endl;
 
     sortMerge(emp, dept);
 
