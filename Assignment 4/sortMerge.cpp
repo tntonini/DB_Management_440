@@ -114,13 +114,16 @@ bool compareDept(DeptBlock const &lhs, DeptBlock const &rhs)
     return lhs.did < rhs.did;
 }
 
-JoinBlock sortMerge(EmpBlock emp[], DeptBlock dept[])
+void sortMerge(vector<EmpBlock> emp, vector<DeptBlock> dept)
 {
     //Sort emp block
-    sort(emp, emp + 30, &compareEmp);
+    sort(emp.begin(), emp.end(), compareEmp);
 
     //Sort dept block
-    sort(dept, dept + 15, &compareDept);
+    sort(dept.begin(), dept.end(), compareDept);
+
+    cout << "lol" << endl;
+    return;
 }
 
 int main()
@@ -130,70 +133,64 @@ int main()
     fstream deptin;
     fstream joinout;
 
+    //open files
     empin.open("Emp.csv", ios::in);
     deptin.open("Dept.csv", ios::in);
     joinout.open("Join.csv", ios::out);
 
-    EmpBlock empBlock[30];
-    DeptBlock deptBlock[15];
+    //structs
+    vector<EmpBlock> empBlock;
+    vector<DeptBlock> deptBlock;
+
+    EmpBlock emp;
+    DeptBlock dept;
+
+    string line, word;
+
 
     if (!empin || !deptin)
     {
         cerr << "File can't be opened! " << endl;
         exit(1);
     }
-    for (int i = 0; i < 30; i++)
-    {
-        empin >> empBlock[i].eid >> empBlock[i].ename >> empBlock[i].age >> empBlock[i].salary;
+
+    //Read in from emp file
+    while(getline(empin, line) && !line.empty()){
+        // turn line into a stream
+        stringstream s(line);
+        // gets everything in stream up to comma
+        getline(s, word,',');
+        emp.eid = stoi(word);
+        getline(s, word, ',');
+        emp.ename = word;
+        getline(s, word, ',');
+        emp.age = stoi(word);
+        getline(s, word, ',');
+        emp.salary = stod(word);
+
+        empBlock.push_back(emp);
     }
-    for (int i = 0; i < 15; i++)
-    {
-        deptin >> deptBlock[i].did >> deptBlock[i].dname >> deptBlock[i].budget >> deptBlock[i].managerid;
+
+        //Read in from dept file
+    while(getline(deptin, line) && !line.empty()){
+        // turn line into a stream
+        stringstream s(line);
+        // gets everything in stream up to comma
+        getline(s, word,',');
+        dept.did = stoi(word);
+        getline(s, word, ',');
+        dept.dname = word;
+        getline(s, word, ',');
+        dept.budget = stoi(word);
+        getline(s, word, ',');
+        dept.managerid = stoi(word);
+
+        deptBlock.push_back(dept);
     }
+
 
     sortMerge(empBlock, deptBlock);
 
-    /*
-    // flags check when relations are done being read
-    bool flag = true;
-    while (flag)
-    {
-        // FOR BLOCK IN RELATION EMP
-
-        // grabs a block
-        empBlock = grabEmp(empin);
-        // checks if filestream is empty
-        if (empBlock.eid == -1)
-        {
-            flag = false;
-        }
-        bool iflag = true;
-        // opens new filestream for dept relation (needs to read in a new one each time a new emp block is seen)
-        fstream deptin;
-        deptin.open("Dept.csv", ios::in);
-        while (iflag)
-        {
-            // FOR BLOCK IN RELATION DEPT
-            deptBlock = grabDept(deptin);
-
-            // in theory these would iterate through the two blocks: empBlock and deptBlock
-            // but since both only contain one tuple, no iteration is needed
-            if (deptBlock.did == -1)
-            {
-                iflag = false;
-            }
-            else
-            {
-
-                // check join condition and print join to output file
-                if (deptBlock.managerid == empBlock.eid)
-                {
-                    printJoin(empBlock, deptBlock, joinout);
-                }
-            }
-        }
-    }
-*/
 
     return 0;
 }
