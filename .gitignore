@@ -1,0 +1,6 @@
+*.out
+*.dSYM
+join.csv
+.DS_Store
+deptsort.csv
+empsort.csv
