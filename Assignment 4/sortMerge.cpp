@@ -23,14 +23,6 @@ struct DeptBlock
     int managerid;
 };
 
-//Print out the attributes from emp and dept when a join condition is met
-void printJoin(EmpBlock emp, DeptBlock dept, fstream &fout)
-{
-    fout << emp.eid << ',' << emp.ename << ',' << emp.age << ','
-         << emp.salary << ',' << dept.did << ',' << dept.dname << ','
-         << dept.budget << "\n";
-}
-
 /**
  * 
  * Sort algorthim referenced here 
@@ -73,17 +65,21 @@ void sortMerge(vector<EmpBlock> emp, vector<DeptBlock> dept)
     {
         if (!mark)
         {
+            //if the eid is less than managerid, incrfement it
             while (emp[r].eid < dept[s].managerid)
             {
                 r++;
             }
 
+            //if the managerid is less than eid, increment it
             if (emp[r].eid > dept[s].managerid)
             {
                 s++;
             }
             mark = s;
         }
+
+        //if they are they same element then print it to the .csv
         if (emp[r].eid == dept[s].managerid)
         {
             joinout << emp[r].eid << ", " << emp[r].ename << ", " << emp[r].age << ", "
