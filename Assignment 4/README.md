@@ -7,7 +7,7 @@ This program reads in two .csv files, runs the sort merge algorithm on the two i
 -----------------------------
 
 To Compile
-g++ -std=c++11 sortMerge.cpp
+g++ -std=c++11 main3.cpp -o main3.out
 
 To Run
-./a.out
+main3.out
