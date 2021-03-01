@@ -1,3 +1,15 @@
+/************************************************
+** Connor Greenwald 
+** Greenwac 
+** 933 287 362
+** 
+** Thomas Tonini
+** Toninit
+** 932 257 516
+** 
+** CS 440 Assingment #4
+**
+*************************************************/
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -42,8 +54,8 @@ bool compareDept(DeptBlock const &lhs, DeptBlock const &rhs)
 void sortMerge(vector<EmpBlock> emp, vector<DeptBlock> dept)
 {
 
-    fstream joinout;
-    joinout.open("join.csv", ios::app);
+    ofstream joinout;
+    joinout.open("join.csv");
     if (!joinout)
     {
         cerr << "File can't be opened! " << endl;
