@@ -19,11 +19,11 @@ struct DeptBlock {
     int managerid;
 };
 
-
-// Grab a single block from the emp.csv file, in theory if a block was larger than
-// one tuple, this function would return an array of EmpBlocks and the entire if
-// and else statement would be wrapped in a loop for x times based on block size
-EmpBlock grabEmp(fstream &empin) {
+    // Grab a single block from the emp.csv file, in theory if a block was larger than
+    // one tuple, this function would return an array of EmpBlocks and the entire if
+    // and else statement would be wrapped in a loop for x times based on block size
+    EmpBlock grabEmp(fstream & empin)
+{
     string line, word;
     EmpBlock emp;
     // grab entire line
